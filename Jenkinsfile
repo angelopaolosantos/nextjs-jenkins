@@ -2,7 +2,7 @@
 pipeline {
   agent {
     node {
-      label 'jnlp-agent-node'
+      label 'jenkins-agent'
     }
   }
   stages {
