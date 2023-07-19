@@ -14,16 +14,7 @@ pipeline {
         sh 'npm config ls'
       }
     }
-    stage('Cloning Git') {
-      steps {
-        git(
-                    url: "https://github.com/angelopaolosantos/nextjs-jenkins.git",
-                    branch: "main",
-                    changelog: true,
-                    poll: true
-                )
-      }
-    }
+    
     stage('Install dependencies') {
       steps {
         sh 'npm install'
