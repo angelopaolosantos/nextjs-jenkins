@@ -1,34 +1,44 @@
-// Sample Jenkins file template
+// Sample Jenkins file template 
 pipeline {
-  agent {
-    node {
-      label 'jenkins-agent'
-    }
-  }
+    agent { 
+        node {
+            label 'jenkins-agent'
+            }
+      }
+ 
+  tools {nodejs "node"}
+ 
   stages {
-    stage('Build') {
+    stage('Check NodeJS configuration') {
       steps {
-        echo 'Building..'
-        sh '''
-           echo "doing build stuff.."
-           '''
+        sh 'npm config ls'
       }
     }
-    stage('Test') {
+    stage('Cloning Git') {
       steps {
-        echo 'Testing..'
-        sh '''
-           echo "doing test stuff.."
-           '''
+        git(
+                    url: "https://github.com/angelopaolosantos/nextjs-jenkins.git",
+                    branch: "main",
+                    changelog: true,
+                    poll: true
+                )
       }
     }
-    stage('Deliver') {
+    stage('Install dependencies') {
       steps {
-        echo 'Deliver....'
-        sh '''
-           echo "doing delivery stuff.."
-           '''
+        sh 'npm install'
       }
     }
+     
+    stage('Run Lint') {
+      steps {
+         sh 'npm run lint'
+      }
+    }    
+    stage('Run Jest') {
+      steps {
+         sh 'npm test'
+      }
+    }   
   }
 }
