@@ -34,14 +34,18 @@ pipeline {
     }
     post {
         success {
-            mail to: '$DEFAULT_RECIPIENTS',
-            subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-            body: "Something is wrong with ${env.BUILD_URL}"
+            emailext(
+                to: '$DEFAULT_RECIPIENTS',
+                subject: "Success Pipeline: ${currentBuild.fullDisplayName}",
+                body: "Everything good with ${env.BUILD_URL}"
+            )
         }
         failure {
-            mail to: '$DEFAULT_RECIPIENTS',
-            subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-            body: "Something is wrong with ${env.BUILD_URL}"
+            emailext(
+                to: '$DEFAULT_RECIPIENTS',
+                subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+                body: "Something is wrong with ${env.BUILD_URL}"
+            )
         }
     }
 }
