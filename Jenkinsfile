@@ -1,35 +1,47 @@
-// Sample Jenkins file template 
+// Sample Jenkins file template
 pipeline {
-    agent { 
+    agent {
         node {
             label 'jenkins-agent'
+        }
+    }
+
+    tools { nodejs 'node' }
+
+    stages {
+        stage('Check NodeJS configuration') {
+            steps {
+                sh 'npm config ls'
             }
-      }
- 
-  tools {nodejs "node"}
- 
-  stages {
-    stage('Check NodeJS configuration') {
-      steps {
-        sh 'npm config ls'
-      }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Run Lint') {
+            steps {
+                sh 'npm run lint'
+            }
+        }
+        stage('Run Jest') {
+            steps {
+                sh 'npm test'
+            }
+        }
     }
-    
-    stage('Install dependencies') {
-      steps {
-        sh 'npm install'
-      }
+    post {
+        success {
+            mail to: $DEFAULT_RECIPIENTS,
+            subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+            body: "Something is wrong with ${env.BUILD_URL}"
+        }
+        failure {
+            mail to: $DEFAULT_RECIPIENTS,
+            subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+            body: "Something is wrong with ${env.BUILD_URL}"
+        }
     }
-     
-    stage('Run Lint') {
-      steps {
-         sh 'npm run lint'
-      }
-    }    
-    stage('Run Jest') {
-      steps {
-         sh 'npm test'
-      }
-    }   
-  }
 }
