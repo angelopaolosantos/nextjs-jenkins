@@ -1,12 +1,13 @@
 // Sample Jenkins file template
 pipeline {
     agent {
-        node {
-            label 'jenkins-agent'
-        }
+        dockerfile true
+        // node {
+        //     label 'jenkins-agent'
+        // }
     }
 
-    tools { nodejs 'node' }
+    // tools { nodejs 'node' }
 
     stages {
         stage('Check NodeJS configuration') {
